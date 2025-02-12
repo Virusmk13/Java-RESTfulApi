@@ -1,9 +1,13 @@
 package org.example.student;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Data
 @Table(name = "Student")
 public class Student {
