@@ -31,6 +31,6 @@ jobs:
 
       - name: Run Ansible playbook
         run: |
-          ansible-playbook ansible/deploy.yml -i inventory \
+          ansible-playbook ansible/Deploy.yml -i inventory \
             -e "docker_user=${{ secrets.DOCKER_USER }}" \
             -e "docker_password=${{ secrets.DOCKER_PASSWORD }}"
