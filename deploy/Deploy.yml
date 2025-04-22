@@ -36,8 +36,3 @@
         username: "{{ docker_user }}"
         password: "{{ docker_password }}"
 
-    - name: Pull Docker image
-      docker_image:
-        name: virusmk13/some-image
-        tag: e2311c69f9e3a4069157174d7d3f713d6fe0a99d
-        source: pull
