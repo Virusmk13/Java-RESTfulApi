@@ -1,0 +1,43 @@
+---
+- name: Deploy and configure on EC2
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Install required system packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - docker.io
+        - python3-pip
+        - python3-apt
+
+    - name: Add current user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: Enable and start Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Install Ansible via pip
+      pip:
+        name: ansible
+        executable: pip3
+
+    - name: Log in to Docker Hub
+      docker_login:
+        username: "{{ docker_user }}"
+        password: "{{ docker_password }}"
+
+    - name: Pull Docker image
+      docker_image:
+        name: virusmk13/some-image
+        tag: e2311c69f9e3a4069157174d7d3f713d6fe0a99d
+        source: pull
