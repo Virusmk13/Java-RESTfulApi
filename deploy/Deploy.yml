@@ -26,11 +26,6 @@
         enabled: yes
         state: started
 
-    - name: Install Ansible via pip
-      pip:
-        name: ansible
-        executable: pip3
-
     - name: Log in to Docker Hub
       docker_login:
         username: "{{ docker_user }}"
