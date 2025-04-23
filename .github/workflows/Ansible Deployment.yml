@@ -28,10 +28,10 @@ jobs:
             exit 1
           fi
 
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts || {
+          if ! ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts; then
             echo "ssh-keyscan failed"
             exit 1
-          }
+          fi
 
       - name: Create Ansible inventory
         run: |
@@ -40,6 +40,6 @@ jobs:
 
       - name: Run Ansible playbook
         run: |
-          ansible-playbook ansible/Deploy.yml -i inventory \
+          ansible-playbook ansible/deploy.yml -i inventory \
             -e "docker_user=${{ secrets.DOCKER_USER }}" \
             -e "docker_password=${{ secrets.DOCKER_PASSWORD }}"
