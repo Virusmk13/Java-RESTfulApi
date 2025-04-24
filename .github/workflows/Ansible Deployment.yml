@@ -22,16 +22,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
-          if [ -z "${{ secrets.EC2_HOST }}" ]; then
-            echo "EC2_HOST is empty"
-            exit 1
-          fi
-
-          if ! ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts; then
-            echo "ssh-keyscan failed"
-            exit 1
-          fi
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Create Ansible inventory
         run: |
@@ -40,6 +31,11 @@ jobs:
 
       - name: Run Ansible playbook
         run: |
-          ansible-playbook deploy/Deploy.yml -i inventory \
+          ansible-playbook ansible/Deploy.yml -i inventory \
             -e "docker_user=${{ secrets.DOCKER_USER }}" \
-            -e "docker_password=${{ secrets.DOCKER_PASSWORD }}"
+            -e "docker_password=${{ secrets.DOCKER_PASSWORD }}" \
+            -e "rds_host=${{ secrets.RDS_HOST }}" \
+            -e "rds_port=${{ secrets.RDS_PORT }}" \
+            -e "rds_name=${{ secrets.RDS_DB }}" \
+            -e "rds_user=${{ secrets.RDS_USER }}" \
+            -e "rds_password=${{ secrets.RDS_PASSWORD }}"
